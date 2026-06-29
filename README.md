@@ -1,6 +1,3 @@
-<div align="center">
-<img src="assets/fig_concept_MEDIC.png" width="700">
-
 <h1>MEDIC</h1>
 <h3>Different Changes Require Different Reasoning:<br>Change-Type-Specialized Experts for Robust Change Captioning</h3>
 
@@ -14,6 +11,9 @@
 
 Accepted to ECCV 2026!
 
+<div align="center">
+<img src="assets/fig_concept_MEDIC.png" width="700">
+   
 <!-- [![Paper](https://img.shields.io/badge/Paper-ECCV%202026-red)]()&nbsp; -->
 
 <!-- [![Checkpoint](https://img.shields.io/badge/Checkpoint-Google%20Drive-blue?logo=googledrive&logoColor=white)]()&nbsp; -->
@@ -122,15 +122,6 @@ Supported datasets:
 * Image Editing Request
    * (https://github.com/airsplay/VisualRelationships)
 
-The dataset paths should be specified in the corresponding configuration files:
-
-```text
-configs/dynamic/transformer_medic_dc.yaml
-configs/dynamic/transformer_medic_chg.yaml
-configs/dynamic/transformer_medic_std.yaml
-configs/dynamic/transformer_medic_ier.yaml
-```
-
 preprocess data:
 
 ```bash
@@ -138,6 +129,15 @@ preprocess data:
   * process after images: python scripts/extract_features.py --input_image_dir /mnt/disk1/clevr_dc/sc_images --output_dir /mnt/disk1/clevr_dc/sc_features
   * Build vocab and training labels: python scripts/preprocess_captions_dc.py
   * Build GT annotations for evaluation: python utils/eval_utils_dc_std.py
+```
+
+The preprocessed dataset paths should be specified in the corresponding configuration files:
+
+```text
+configs/dynamic/transformer_medic_dc.yaml
+configs/dynamic/transformer_medic_chg.yaml
+configs/dynamic/transformer_medic_std.yaml
+configs/dynamic/transformer_medic_ier.yaml
 ```
 
 ## Training and Evaluation
