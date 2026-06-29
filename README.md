@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/fig_concept_MEDIC.png.png" width="700">
+<img src="assets/fig_concept_MEDIC.png" width="700">
 
 <h1>MEDIC</h1>
 <h3>Different Changes Require Different Reasoning:<br>Change-Type-Specialized Experts for Robust Change Captioning</h3>
