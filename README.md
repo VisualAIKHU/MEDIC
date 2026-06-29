@@ -71,15 +71,15 @@ Current release:
 ## Qualitative and Analytical Results
 
 <div align="center">
-<img src="assets/typewise_results.png" width="950">
+<img src="assets/fig_vis_MEDIC.png" width="950">
 </div>
 
 <div align="center">
-<img src="assets/tsne.png" width="700">
+<img src="assets/fig_tSNE_MEDIC.png" width="700">
 </div>
 
 <div align="center">
-<img src="assets/slot_activation.png" width="850">
+<img src="assets/fig_slot_activation_MEDIC.png" width="850">
 </div>
 
 ## Getting Started
@@ -94,10 +94,11 @@ cd MEDIC
 Create the environment:
 
 ```bash
-conda create -n medic python=3.8 -y
-conda activate medic
-
-pip install -r requirements.txt
+  1. conda env create --file medic.yaml
+  2. conda activate medic
+  3. python -m spacy download en_core_web_sm
+  4. conda install pytorch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 -c pytorch -y
+  5. cd pycocoevalcap && python setup.py install
 ```
 
 ## Data Preparation
