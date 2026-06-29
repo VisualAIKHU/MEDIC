@@ -108,8 +108,13 @@ Please prepare each dataset following the original benchmark settings.
 Supported datasets:
 
 * CLEVR-DC
+   * (https://github.com/hsgkim/clevr-dc)
+   * before images: https://drive.google.com/file/d/1FeK--ilqYItdx6Fw6pLSWWNujylOovIT/view
+   * after images: https://drive.google.com/file/d/1csIsr8IcwrOYAe-JAWQrcb3iu5RtaTK7/view
 * CLEVR-Change
+   * (https://github.com/Seth-Park/RobustChangeCaptioning)
 * Spot-the-Diff
+   * (https://github.com/harsh19/spot-the-diff) 
 * Image Editing Request
 
 The dataset paths should be specified in the corresponding configuration files:
@@ -119,6 +124,15 @@ configs/dynamic/transformer_medic_dc.yaml
 configs/dynamic/transformer_medic_chg.yaml
 configs/dynamic/transformer_medic_std.yaml
 configs/dynamic/transformer_medic_ier.yaml
+```
+
+preprocess data:
+
+```bash
+  * process before images: python scripts/extract_features.py --input_image_dir /mnt/disk1/clevr_dc/images --output_dir /mnt/disk1/clevr_dc/features
+  * process after images: python scripts/extract_features.py --input_image_dir /mnt/disk1/clevr_dc/sc_images --output_dir /mnt/disk1/clevr_dc/sc_features
+  * Build vocab and training labels: python scripts/preprocess_captions_dc.py
+  * Build GT annotations for evaluation: python utils/eval_utils_dc_std.py
 ```
 
 ## Training and Evaluation
@@ -220,6 +234,7 @@ MEDIC/
 
 This repository is built upon publicly available change captioning codebases.
 We sincerely thank the authors of DIRL, SMART, and SCORER for releasing their implementations.
+(https://github.com/tuyunbin)
 
 ## Citation
 
