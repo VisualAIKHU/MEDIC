@@ -1,0 +1,58 @@
+exp_name: 'DIRL+CCR'
+gpu_id: [0]
+inference: False
+lambda_disentangle: 1
+lambda_consistency: 1
+lambda_cls: 1.0
+lambda_type: 1.0
+cls_temperature: 1.0
+type_temperature: 1.0
+loss:
+  margin_inter: 0.2
+  margin_intra: 0.7
+  lambda_inter: 1.0
+  lambda_intra: 1.0
+logger:
+    display_id: 9908
+model:
+    soft_prompt:
+        length: 128
+    transformer_encoder:
+        input_dim: 2048
+        feat_dim: 1024
+        emb_dim: 512
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        dim: 128
+    transformer_decoder:
+        input_dim: 2048
+        word_dim: 300
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        vocab_size: 1969
+        seq_length: 52
+        share_wd_cls_weight: False
+        label_smoothing: 0.0
+data:
+    dataset: 'rcc_dataset_transformer_type_aware_std'
+    vocab_json: '/mnt/disk1/Spot-the-Diff/transformer_vocab.json'
+    h5_label_file: '/mnt/disk1/Spot-the-Diff/transformer_labels.h5'
+    default_feature_dir: '/mnt/disk1/Spot-the-Diff/features'
+    semantic_feature_dir: '/mnt/disk1/Spot-the-Diff/sc_features'
+    splits_json: '/mnt/disk1/Spot-the-Diff/splits.json'
+    default_img_dir: '/mnt/disk1/Spot-the-Diff/images'
+    semantic_img_dir: '/mnt/disk1/Spot-the-Diff/sc_images'
+    type_mapping_json: '/mnt/disk1/Spot-the-Diff/type_mapping_std.json'
+    train:
+        batch_size: 128
+train:
+    max_iter: 13000
+    snapshot_interval: 100
+    grad_clip: -1.0
+    optim:
+        type: 'adam'
+        lr: 0.0002
+        weight_decay: 0.0
+

@@ -1,0 +1,59 @@
+exp_name: 'DIRL+CCR'
+gpu_id: [0]
+inference: False
+lambda_disentangle: 1
+lambda_consistency: 1
+lambda_cls: 1.0
+lambda_type: 1.0
+cls_temperature: 1.0
+type_temperature: 1.0
+loss:
+    margin_inter: 0.2
+    margin_intra: 0.7
+    lambda_inter: 1.0
+    lambda_intra: 1.0
+logger:
+    display_id: 9908
+model:
+    transformer_encoder:
+        input_dim: 4096
+        feat_dim: 1026
+        emb_dim: 512
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        dim: 128
+    transformer_decoder:
+        input_dim: 2052
+        word_dim: 300
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        vocab_size: 76
+        seq_length: 24
+        share_wd_cls_weight: False
+        label_smoothing: 0.0
+data:
+    dataset: 'rcc_dataset_transformer_type_aware_chg'
+    vocab_json: '/mnt/disk1/clevr_change/data/transformer_vocab.json'
+    h5_label_file: '/mnt/disk1/clevr_change/data/transformer_labels.h5'
+    default_feature_dir: '/mnt/disk1/clevr_change/data/features'
+    semantic_feature_dir: '/mnt/disk1/clevr_change/data/sc_features'
+    nonsemantic_feature_dir: '/mnt/disk1/clevr_change/data/nsc_features'
+    splits_json: '/mnt/disk1/clevr_change/data/splits.json'
+    default_img_dir: '/mnt/disk1/clevr_change/data/images'
+    semantic_img_dir: '/mnt/disk1/clevr_change/data/sc_images'
+    nonsemantic_img_dir: '/mnt/disk1/clevr_change/data/nsc_images'
+    type_mapping_json: '/mnt/disk1/clevr_change/data/type_mapping.json'
+    train:
+        batch_size: 128
+train:
+    max_iter: 13000
+    snapshot_interval: 1000
+    grad_clip: -1.0
+    optim:
+        type: 'adam'
+        lr: 0.0002
+        weight_decay: 0.0
+
+

@@ -1,0 +1,55 @@
+exp_name: 'DIRL+CCR'
+gpu_id: [0]
+inference: False
+logger:
+    display_id: 9908
+model:
+    num_slots: 10
+    slot_iters: 3
+    transformer_encoder:
+        input_dim: 2048
+        feat_dim: 1024
+        emb_dim: 512
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        dim: 128
+    transformer_decoder:
+        input_dim: 2048
+        word_dim: 300
+        att_dim: 512
+        att_head: 8
+        att_layer: 2
+        vocab_size: 2459
+        seq_length: 62
+        share_wd_cls_weight: False
+        label_smoothing: 0.0
+data:
+    dataset: 'rcc_dataset_transformer_type_aware_ier'
+    vocab_json: '/mnt/disk1/image-editing-request/transformer_vocab_index.json'
+    h5_label_file: '/mnt/disk1/image-editing-request/transformer_labels_index.h5'
+    default_feature_dir: '/mnt/disk1/image-editing-request/features'
+    semantic_feature_dir: '/mnt/disk1/image-editing-request/sc_features'
+    splits_json: '/mnt/disk1/image-editing-request/updated_splits.json'
+    default_img_dir: '/mnt/disk1/image-editing-request/images'
+    semantic_img_dir: '/mnt/disk1/image-editing-request/sc_images'
+    type_mapping_json: '/mnt/disk1/image-editing-request/type_mapping_edit.json'
+    num_workers: 8
+    train:
+        batch_size: 128
+    val:
+        batch_size: 64
+        seq_per_img: 5
+    test:
+        batch_size: 64
+        seq_per_img: 5
+train:
+    max_iter: 13000
+    snapshot_interval: 500
+    log_interval: 50
+    grad_clip: -1.0
+    optim:
+        type: 'adam'
+        lr: 0.0002
+        weight_decay: 0.0
+        gamma: 0.9
