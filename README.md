@@ -68,15 +68,19 @@ Current release:
 * Configurations for CLEVR-DC, CLEVR-Change, Spot-the-Diff, and Image Editing Request
 * Evaluation scripts
 
-## Qualitative and Analytical Results
+## Qualitative Results
 
 <div align="center">
 <img src="assets/fig_vis_MEDIC.png" width="950">
 </div>
 
+## t-SNE Analysis
+
 <div align="center">
 <img src="assets/fig_tSNE_MEDIC.png" width="700">
 </div>
+
+## Memory Slot Activation
 
 <div align="center">
 <img src="assets/fig_slot_activation_MEDIC.png" width="850">
@@ -116,6 +120,7 @@ Supported datasets:
 * Spot-the-Diff
    * (https://github.com/harsh19/spot-the-diff) 
 * Image Editing Request
+   * (https://github.com/airsplay/VisualRelationships)
 
 The dataset paths should be specified in the corresponding configuration files:
 
