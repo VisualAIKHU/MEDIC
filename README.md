@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/logo.png" width="700">
+<img src="assets/fig_concept_MEDIC.png.png" width="700">
 
 <h1>MEDIC</h1>
 <h3>Different Changes Require Different Reasoning:<br>Change-Type-Specialized Experts for Robust Change Captioning</h3>
@@ -46,7 +46,7 @@ To address this limitation, we propose **Multi-Expert Diagnosis for Image Change
 MEDIC is designed as a plug-in module and can be integrated into existing change captioning models. In our paper, we apply MEDIC to representative baselines including DIRL, SMART, and SCORER.
 
 <div align="center">
-<img src="assets/framework.png" width="950">
+<img src="assets/fig_main_MEDIC.png" width="950">
 </div>
 
 ## Overview
