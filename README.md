@@ -1,51 +1,97 @@
-# MEDIC
+<div align="center">
+<img src="assets/logo.png" width="700">
 
-Official repository for **Different Changes Require Different Reasoning:
-Change-Type-Specialized Experts for Robust Change Captioning**
+<h1>MEDIC</h1>
+<h3>Different Changes Require Different Reasoning:<br>Change-Type-Specialized Experts for Robust Change Captioning</h3>
 
-**Jiyoung Park***, **InJae Oh***, and **Jung Uk Kim†**
-Kyung Hee University
-Accepted to ECCV 2026
+<a href="https://orcid.org/0009-0000-4212-7745"><strong>Jiyoung Park</strong></a><sup>1,*</sup>
+· <a href="https://orcid.org/0009-0001-1321-3019"><strong>InJae Oh</strong></a><sup>1,*</sup>
+· <a href="https://orcid.org/0000-0003-4533-4875"><strong>Jung Uk Kim</strong></a><sup>1,†</sup>
 
-* Equal contribution. † Corresponding author.
+<sup>1</sup>Kyung Hee University, Yong-in, South Korea
+
+<sup>*</sup> Equal contribution, <sup>†</sup> Corresponding author
+
+Accepted to ECCV 2026!
+
+<!-- [![Paper](https://img.shields.io/badge/Paper-ECCV%202026-red)]()&nbsp; -->
+
+<!-- [![Checkpoint](https://img.shields.io/badge/Checkpoint-Google%20Drive-blue?logo=googledrive&logoColor=white)]()&nbsp; -->
+
+<!-- [![Dataset](https://img.shields.io/badge/Dataset-Preparation-green)]() -->
+
+</div>
 
 ---
 
-## Overview
+## Table of Contents
 
-**MEDIC** introduces change-type-aware reasoning for change captioning.
-Instead of processing all visual changes with a single type-agnostic reasoning path, MEDIC routes each image pair through change-type-specialized experts.
+* [Abstract](#abstract)
+* [Overview](#overview)
+* [Qualitative and Analytical Results](#qualitative-and-analytical-results)
+* [Getting Started](#getting-started)
+* [Data Preparation](#data-preparation)
+* [Training and Evaluation](#training-and-evaluation)
+* [Results](#results)
+* [Plug-in Usage](#plug-in-usage)
+* [Acknowledgement](#acknowledgement)
+* [Citation](#citation)
+
+## Abstract
+
+Change captioning aims to generate natural language descriptions that explain semantic differences between a pair of images. Although different change types, such as color shifts, object additions, object removals, and spatial movements, require different visual evidence and reasoning processes, existing methods often process all changes through a single type-agnostic pipeline.
+
+To address this limitation, we propose **Multi-Expert Diagnosis for Image Change (MEDIC)**, a change-type-aware framework for robust change captioning. MEDIC introduces a two-stage routing mechanism that first determines whether a meaningful change exists and then assigns the input to change-type-specialized experts. Each expert is implemented as a key-value memory network, enabling input-adaptive retrieval of type-relevant visual patterns. By explicitly modeling change-type diversity, MEDIC improves the precision and robustness of change descriptions across diverse datasets.
 
 MEDIC is designed as a plug-in module and can be integrated into existing change captioning models. In our paper, we apply MEDIC to representative baselines including DIRL, SMART, and SCORER.
+
+<div align="center">
+<img src="assets/framework.png" width="950">
+</div>
+
+## Overview
+
+MEDIC consists of two main components:
+
+1. **Two-stage router**
+   The router first predicts whether a change exists and then estimates the distribution over change types.
+
+2. **Change-type memory experts**
+   Each expert is specialized for a specific change type and retrieves type-relevant visual patterns through a key-value memory network.
+
+The current release provides the official implementation of **DIRL + MEDIC**. MEDIC is implemented as a plug-in module, and additional integrations for other baselines will be updated.
 
 Current release:
 
 * Core MEDIC module
 * DIRL + MEDIC training and evaluation code
-* Configuration files for benchmark datasets
+* Configurations for CLEVR-DC, CLEVR-Change, Spot-the-Diff, and Image Editing Request
 * Evaluation scripts
 
-Additional integrations and checkpoints will be released soon.
+## Qualitative and Analytical Results
 
----
+<div align="center">
+<img src="assets/typewise_results.png" width="950">
+</div>
 
-## Architecture
+<div align="center">
+<img src="assets/tsne.png" width="700">
+</div>
 
-<p align="center">
-  <img src="assets/framework.png" width="900">
-</p>
+<div align="center">
+<img src="assets/slot_activation.png" width="850">
+</div>
 
-MEDIC consists of two main components:
+## Getting Started
 
-1. **Two-stage router**
-   The router first determines whether a meaningful change exists, and then predicts the corresponding change type.
+Follow the steps below to set up the environment and run MEDIC.
 
-2. **Change-type memory experts**
-   Each expert is implemented as a key-value memory network and retrieves type-relevant visual patterns for more precise change reasoning.
+```bash
+git clone https://github.com/VisualAIKHU/MEDIC.git
+cd MEDIC
+```
 
----
-
-## Installation
+Create the environment:
 
 ```bash
 conda create -n medic python=3.8 -y
@@ -54,11 +100,9 @@ conda activate medic
 pip install -r requirements.txt
 ```
 
----
-
 ## Data Preparation
 
-Please prepare the datasets following the original benchmark settings.
+Please prepare each dataset following the original benchmark settings.
 
 Supported datasets:
 
@@ -67,45 +111,73 @@ Supported datasets:
 * Spot-the-Diff
 * Image Editing Request
 
-Dataset preparation instructions will be provided in `docs/DATA_PREPARATION.md`.
+The dataset paths should be specified in the corresponding configuration files:
 
----
-
-## Training
-
-Example command for training DIRL + MEDIC:
-
-```bash
-bash scripts/train_dirl_medic.sh
+```text
+configs/dynamic/transformer_medic_dc.yaml
+configs/dynamic/transformer_medic_chg.yaml
+configs/dynamic/transformer_medic_std.yaml
+configs/dynamic/transformer_medic_ier.yaml
 ```
 
-Detailed training instructions will be provided in `docs/TRAIN_AND_EVAL.md`.
+## Training and Evaluation
 
----
+We provide training and evaluation code for DIRL + MEDIC.
 
-## Evaluation
-
-Example command for evaluating DIRL + MEDIC:
+### CLEVR-DC
 
 ```bash
-bash scripts/test_dirl_medic.sh
+bash run/run_dc_final.sh
 ```
 
----
+### CLEVR-Change
+
+```bash
+bash run/run_chg_final.sh
+```
+
+### Spot-the-Diff
+
+```bash
+bash run/run_std_final.sh
+```
+
+The main training, testing, and evaluation scripts are organized as follows:
+
+```text
+train/
+├── train_chg_final.py
+└── train_dc_std_final.py
+
+test/
+├── test_chg_final.py
+└── test_dc_std_final.py
+
+eval/
+├── evaluate_chg.py
+├── evaluate_dc_std.py
+└── evaluate_ier.py
+```
 
 ## Results
 
 ### Single-change setting
 
-| Method       | Dataset       | BLEU-4 | METEOR | ROUGE-L | CIDEr | SPICE |
-| ------------ | ------------- | -----: | -----: | ------: | ----: | ----: |
-| DIRL + MEDIC | CLEVR-DC      |      - |      - |       - |     - |     - |
-| DIRL + MEDIC | CLEVR-Change  |      - |      - |       - |     - |     - |
-| DIRL + MEDIC | Spot-the-Diff |      - |      - |       - |     - |     - |
+| Method           | Dataset       |   BLEU-4 |   METEOR |  ROUGE-L |     CIDEr |    SPICE |
+| ---------------- | ------------- | -------: | -------: | -------: | --------: | -------: |
+| DIRL             | CLEVR-DC      |     51.4 |     32.3 |     66.3 |      84.1 |     16.8 |
+| **DIRL + MEDIC** | CLEVR-DC      | **58.5** | **35.6** | **71.0** |  **99.8** | **20.0** |
+| DIRL             | CLEVR-Change  |     56.2 |     41.0 |     73.8 |     126.0 |     33.1 |
+| **DIRL + MEDIC** | CLEVR-Change  | **57.5** | **41.3** | **74.6** | **129.2** | **33.5** |
+| DIRL             | Spot-the-Diff |     10.3 |     13.8 |     32.8 |      40.9 |     19.9 |
+| **DIRL + MEDIC** | Spot-the-Diff | **11.1** | **14.6** | **33.7** |  **45.5** | **23.0** |
 
-The complete results and pretrained checkpoints will be released soon.
+### Multi-change setting on Spot-the-Diff
 
----
+| Method           |  BLEU-4 |   METEOR |  ROUGE-L |    CIDEr |    SPICE |
+| ---------------- | ------: | -------: | -------: | -------: | -------: |
+| DIRL             |     4.6 |      9.5 |     23.8 |     21.5 |     14.8 |
+| **DIRL + MEDIC** | **6.8** | **11.2** | **26.7** | **31.2** | **20.1** |
 
 ## Plug-in Usage
 
@@ -123,25 +195,30 @@ decoder_input = torch.cat([paired_feature, medic_feature], dim=-1)
 caption = decoder(decoder_input)
 ```
 
----
-
 ## Repository Structure
 
 ```text
 MEDIC/
-├── assets/
 ├── configs/
-├── docs/
+│   ├── config_transformer_medic.py
+│   └── dynamic/
+├── datasets/
+├── eval/
 ├── models/
-│   └── medic/
-├── scripts/
-├── tools/
+├── run/
+├── test/
+├── train/
+├── utils/
+├── assets/
+├── scheduler.py
 ├── README.md
-├── requirements.txt
-└── .gitignore
+└── requirements.txt
 ```
 
----
+## Acknowledgement
+
+This repository is built upon publicly available change captioning codebases.
+We sincerely thank the authors of DIRL, SMART, and SCORER for releasing their implementations.
 
 ## Citation
 
@@ -155,10 +232,3 @@ If you find this repository useful, please consider citing our paper.
   year={2026}
 }
 ```
-
----
-
-## Acknowledgement
-
-This repository is built upon publicly available change captioning codebases.
-We sincerely thank the authors of DIRL, SMART, and SCORER for releasing their implementations.
