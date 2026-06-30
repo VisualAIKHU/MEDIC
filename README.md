@@ -232,7 +232,7 @@ MEDIC/
 ├── assets/
 ├── scheduler.py
 ├── README.md
-└── requirements.txt
+└── medic.yaml
 ```
 
 ## Acknowledgement
