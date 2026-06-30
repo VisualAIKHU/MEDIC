@@ -28,7 +28,7 @@ Accepted to ECCV 2026!
 
 * [Abstract](#abstract)
 * [Overview](#overview)
-* [Qualitative and Analytical Results](#qualitative-results)
+* [Qualitative and Analytical Results](#qualitative-and-analytical-results)
 * [Getting Started](#getting-started)
 * [Data Preparation](#data-preparation)
 * [Training and Evaluation](#training-and-evaluation)
@@ -68,19 +68,21 @@ Current release:
 * Configurations for CLEVR-DC, CLEVR-Change, Spot-the-Diff, and Image Editing Request
 * Evaluation scripts
 
-## Qualitative Results
+## Qualitative and Analytical Results
+
+### Qualitative Results
 
 <div align="center">
 <img src="assets/fig_vis_MEDIC.png" width="950">
 </div>
 
-## t-SNE Analysis
+### t-SNE Analysis
 
 <div align="center">
 <img src="assets/fig_tSNE_MEDIC.png" width="700">
 </div>
 
-## Memory Slot Activation
+### Memory Slot Activation
 
 <div align="center">
 <img src="assets/fig_slot_activation_MEDIC.png" width="850">
