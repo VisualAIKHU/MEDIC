@@ -28,7 +28,7 @@ Accepted to ECCV 2026!
 
 * [Abstract](#abstract)
 * [Overview](#overview)
-* [Qualitative and Analytical Results](#qualitative-and-analytical-results)
+* [Qualitative and Analytical Results](#qualitative-results)
 * [Getting Started](#getting-started)
 * [Data Preparation](#data-preparation)
 * [Training and Evaluation](#training-and-evaluation)
