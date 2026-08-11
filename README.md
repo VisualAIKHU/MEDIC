@@ -1,13 +1,13 @@
 <h1>MEDIC</h1>
 <h3>Different Changes Require Different Reasoning:<br>Change-Type-Specialized Experts for Robust Change Captioning</h3>
 
-<a href="https://orcid.org/0009-0000-4212-7745"><strong>Jiyoung Park</strong></a><sup>1,*</sup>
-· <a href="https://orcid.org/0009-0001-1321-3019"><strong>InJae Oh</strong></a><sup>1,*</sup>
-· <a href="https://orcid.org/0000-0003-4533-4875"><strong>Jung Uk Kim</strong></a><sup>1,†</sup>
+<a href="https://orcid.org/0009-0000-4212-7745"><strong>Jiyoung Park</strong></a><sup>1,&#42;</sup>
+· <a href="https://orcid.org/0009-0001-1321-3019"><strong>InJae Oh</strong></a><sup>1,&#42;</sup>
+· <a href="https://orcid.org/0000-0003-4533-4875"><strong>Jung Uk Kim</strong></a><sup>1,&dagger;</sup>
 
 <sup>1</sup>Kyung Hee University, Yong-in, South Korea
 
-<sup>*</sup> Equal contribution, <sup>†</sup> Corresponding author
+<sup>&#42;</sup> Equal contribution, <sup>&dagger;</sup> Corresponding author
 
 Accepted to ECCV 2026!
 
@@ -95,3 +95,170 @@ Follow the steps below to set up the environment and run MEDIC.
 ```bash
 git clone https://github.com/VisualAIKHU/MEDIC.git
 cd MEDIC
+```
+
+Create the environment:
+
+```bash
+conda env create --file medic.yaml
+conda activate medic
+python -m spacy download en_core_web_sm
+conda install pytorch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 -c pytorch -y
+cd pycocoevalcap && python setup.py install
+```
+
+## Data Preparation
+
+Please prepare each dataset following the original benchmark settings.
+
+Supported datasets:
+
+* CLEVR-DC
+  * [https://github.com/hsgkim/clevr-dc](https://github.com/hsgkim/clevr-dc)
+  * before images: [https://drive.google.com/file/d/1FeK--ilqYItdx6Fw6pLSWWNujylOovIT/view](https://drive.google.com/file/d/1FeK--ilqYItdx6Fw6pLSWWNujylOovIT/view)
+  * after images: [https://drive.google.com/file/d/1csIsr8IcwrOYAe-JAWQrcb3iu5RtaTK7/view](https://drive.google.com/file/d/1csIsr8IcwrOYAe-JAWQrcb3iu5RtaTK7/view)
+* CLEVR-Change
+  * [https://github.com/Seth-Park/RobustChangeCaptioning](https://github.com/Seth-Park/RobustChangeCaptioning)
+* Spot-the-Diff
+  * [https://github.com/harsh19/spot-the-diff](https://github.com/harsh19/spot-the-diff)
+* Image Editing Request
+  * [https://github.com/airsplay/VisualRelationships](https://github.com/airsplay/VisualRelationships)
+
+preprocess data:
+
+```bash
+# process before images
+python scripts/extract_features.py --input_image_dir /mnt/disk1/clevr_dc/images --output_dir /mnt/disk1/clevr_dc/features
+
+# process after images
+python scripts/extract_features.py --input_image_dir /mnt/disk1/clevr_dc/sc_images --output_dir /mnt/disk1/clevr_dc/sc_features
+
+# Build vocab and training labels
+python scripts/preprocess_captions_dc.py
+
+# Build GT annotations for evaluation
+python utils/eval_utils_dc_std.py
+```
+
+The preprocessed dataset paths should be specified in the corresponding configuration files:
+
+```text
+configs/dynamic/transformer_medic_dc.yaml
+configs/dynamic/transformer_medic_chg.yaml
+configs/dynamic/transformer_medic_std.yaml
+configs/dynamic/transformer_medic_ier.yaml
+```
+
+## Training and Evaluation
+
+We provide training and evaluation code for DIRL + MEDIC.
+
+### CLEVR-DC
+
+```bash
+bash run/run_dc_final.sh
+```
+
+### CLEVR-Change
+
+```bash
+bash run/run_chg_final.sh
+```
+
+### Spot-the-Diff
+
+```bash
+bash run/run_std_final.sh
+```
+
+The main training, testing, and evaluation scripts are organized as follows:
+
+```text
+train/
+├── train_chg_final.py
+└── train_dc_std_final.py
+
+test/
+├── test_chg_final.py
+└── test_dc_std_final.py
+
+eval/
+├── evaluate_chg.py
+├── evaluate_dc_std.py
+└── evaluate_ier.py
+```
+
+## Results
+
+### Single-change setting
+
+| Method | Dataset | BLEU-4 | METEOR | ROUGE-L | CIDEr | SPICE |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| DIRL | CLEVR-DC | 51.4 | 32.3 | 66.3 | 84.1 | 16.8 |
+| **DIRL + MEDIC** | CLEVR-DC | **58.5** | **35.6** | **71.0** | **99.8** | **20.0** |
+| DIRL | CLEVR-Change | 56.2 | 41.0 | 73.8 | 126.0 | 33.1 |
+| **DIRL + MEDIC** | CLEVR-Change | **57.5** | **41.3** | **74.6** | **129.2** | **33.5** |
+| DIRL | Spot-the-Diff | 10.3 | 13.8 | 32.8 | 40.9 | 19.9 |
+| **DIRL + MEDIC** | Spot-the-Diff | **11.1** | **14.6** | **33.7** | **45.5** | **23.0** |
+
+### Multi-change setting on Spot-the-Diff
+
+| Method | BLEU-4 | METEOR | ROUGE-L | CIDEr | SPICE |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| DIRL | 4.6 | 9.5 | 23.8 | 21.5 | 14.8 |
+| **DIRL + MEDIC** | **6.8** | **11.2** | **26.7** | **31.2** | **20.1** |
+
+## Plug-in Usage
+
+MEDIC can be integrated into existing change captioning models that produce paired visual difference features.
+
+```python
+# paired visual difference feature from a baseline model
+paired_feature = torch.cat([diff_before, diff_after], dim=-1)
+
+# MEDIC module
+medic_feature, routing_info = medic(paired_feature)
+
+# feed the enhanced representation to the caption decoder
+decoder_input = torch.cat([paired_feature, medic_feature], dim=-1)
+caption = decoder(decoder_input)
+```
+
+## Repository Structure
+
+```text
+MEDIC/
+├── configs/
+│   ├── config_transformer_medic.py
+│   └── dynamic/
+├── datasets/
+├── eval/
+├── models/
+├── run/
+├── test/
+├── train/
+├── utils/
+├── assets/
+├── scheduler.py
+├── README.md
+└── medic.yaml
+```
+
+## Acknowledgement
+
+This repository is built upon publicly available change captioning codebases.  
+We sincerely thank the authors of DIRL, SMART, and SCORER for releasing their implementations.  
+[https://github.com/tuyunbin](https://github.com/tuyunbin)
+
+## Citation
+
+If you find this repository useful, please consider citing our paper.
+
+```bibtex
+@inproceedings{park2026medic,
+  title={Different Changes Require Different Reasoning: Change-Type-Specialized Experts for Robust Change Captioning},
+  author={Park, Jiyoung and Oh, InJae and Kim, Jung Uk},
+  booktitle={European Conference on Computer Vision},
+  year={2026}
+}
+```
